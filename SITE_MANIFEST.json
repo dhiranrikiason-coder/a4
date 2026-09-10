@@ -1,0 +1,20 @@
+{
+  "domain": "corianderfare.com",
+  "category": "Botanical Gastronomy / Gourmet Culinary",
+  "design_style": "Golden Botanical Luxury",
+  "layout_fingerprint": "corianderfare_botanical_split_v1",
+  "image_count": 16,
+  "blog_count": 6,
+  "all_pages_html": true,
+  "css_verified": true,
+  "cosmetic_content_scan": "passed",
+  "alcohol_content_scan": "passed",
+  "policy_paragraphs_lines": "5-6 lines verified",
+  "header_policy_hidden_desktop": true,
+  "contact_info": {
+    "address": "181 Mercer Street, New York, NY 10012, United States",
+    "phone": "+1-888-777-5845",
+    "email": "care@corianderfare.com"
+  },
+  "google_analytics_tag": "G-0LY0HY7L01"
+}
